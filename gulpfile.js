@@ -14,7 +14,7 @@ var url = require('url');
 
 var fs = require('fs');
 
-// var data = require('./data/data.json');
+var data = require('./data/data.json');
 
 //起服务
 gulp.task('server', function() {
@@ -26,8 +26,12 @@ gulp.task('server', function() {
                 if (pathname === '/favicon.ico') {
                     return false;
                 }
-                pathname = pathname === '/' ? 'index.html' : pathname;
-                res.end(fs.readFileSync(path.join(__dirname, 'src', pathname)))
+                if (pathname === '/api/list') {
+                    res.end(JSON.stringify({ code: 1, msg: data }));
+                } else {
+                    pathname = pathname === '/' ? 'index.html' : pathname;
+                    res.end(fs.readFileSync(path.join(__dirname, 'src', pathname)));
+                }
             }
         }))
 });
